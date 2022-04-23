@@ -2,7 +2,22 @@
 const db = require('../../data/dbConfig');
 
 const getAll = () => {
-    return db('projects');
+    const query = db('projects');
+    const projectMap = query.map(project => {
+        if (project.project_completed === 0) {
+
+            return {
+                ...project,
+                project_completed: false
+            }
+        } else if (project.project_completed === 1) {
+            return {
+                ...project,
+                project_completed: true
+            }
+        }
+    })
+    return projectMap;
 }
 
 function add(project) {

@@ -1,18 +1,24 @@
 // build your `/api/tasks` router here
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const Task = require('./model');
 
-// router.use('*', (req, res) => {
-//     res.json({ api: `left` })
-// })
+const router = express.Router();
 
-// router.use((err, req, res, next) => { // eslint-disable-line
-//     res.status(err.status || 500).json({
-//         customMessage: "NAaaaaNI!",
-//         message: err.message,
-//         stack: err.stack
-//     })
-// })
+router.get('/', (req, res, next) => {
+    Task.get()
+        .then(tasks => {
+            res.json(tasks)
+        })
+        .catch(next)
+})
 
-// module.exports = router;
+router.post('/', (req, res, next) => {
+    Task.add(req.body)
+        .then(task => {
+            res.status(201).json(task)
+        })
+        .catch(next)
+})
+
+module.exports = router;
 
