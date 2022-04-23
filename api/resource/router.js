@@ -1,17 +1,23 @@
 // build your `/api/resources` router here
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const Resource = require('./model');
 
-// router.use('*', (req, res) => {
-//     res.json({ api: `down` })
-// })
+const router = express.Router();
 
-// router.use((err, req, res, next) => { // eslint-disable-line
-//     res.status(err.status || 500).json({
-//         customMessage: "NAaaaaNI!",
-//         message: err.message,
-//         stack: err.stack
-//     })
-// })
+router.get('/', (req, res, next) => {
+  Resource.find()
+  .then(resources => {
+      res.json(resources)
+  })
+  .catch(next)
+})
 
-// module.exports = router;
+router.post('/', (req, res, next) => {
+  Resource.add(req.body)
+  .then(resource => {
+    res.status(201).json(resource)
+  })
+  .catch(next)
+})
+
+  module.exports = router;
