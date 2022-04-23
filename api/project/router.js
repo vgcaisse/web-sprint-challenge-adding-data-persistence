@@ -1,17 +1,23 @@
 // build your `/api/projects` router here
 const express = require('express');
+const Project = require('./model');
+
 const router = express.Router();
 
-router.use('*', (req, res) => {
-    res.json({ api: `up` })
+router.get('/', (req, res, next) => {
+    Project.getAll()
+        .then(projects => {
+            res.json(projects)
+        })
+        .catch(next)
 })
 
-router.use((err, req, res, next) => { // eslint-disable-line
-    res.status(err.status || 500).json({
-        customMessage: "NAaaaaNI!",
-        message: err.message,
-        stack: err.stack
-    })
+router.post('/', (req, res, next) => {
+    Project.add(req.body)
+        .then(project => {
+            res.status(201).json(project)
+        })
+        .catch(next)
 })
 
 module.exports = router;
