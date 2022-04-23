@@ -9,7 +9,7 @@ router.get('/', (req, res, next) => {
         .then(resources => {
             res.json(resources)
         })
-        .catch(next)
+        .catch(err => { next(err) })
 })
 
 router.post('/', (req, res, next) => {
@@ -17,7 +17,7 @@ router.post('/', (req, res, next) => {
         .then(resource => {
             res.status(201).json(resource)
         })
-        .catch(next)
+        .catch(err => { next(err) })
 })
 
 module.exports = router;
