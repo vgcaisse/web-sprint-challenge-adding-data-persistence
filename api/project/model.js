@@ -1,48 +1,28 @@
-// build your `Project` model here
+
 const db = require('../../data/dbConfig');
 
-function getAll() {
-    // return db('projects');
-    const query = db('projects');
-    const projectMap = query.map(project => {
-        if (project.project_completed === 0) {
-            return {
-                ...project,
-                project_completed: false
-            }
-        } else if (project.project_completed === 1) {
-            return {
-                ...project,
-                project_completed: true
-            }
-        }
-    })
-    return projectMap;
+async function getAll() {
+    const projects = await db('projects');
+    projects.forEach(project => {
+        !project.project_completed ? project.project_completed = false : project.project_completed = true;
+    });
+    return projects;
 }
 
-function add(project) {
-    const query = db('projects')
+async function add(project) {
+    const newProject = await db('projects')
         .insert(project)
         .then(([project_id]) => {
             return db('projects')
                 .where('project_id', project_id)
-                .first()
-        })
+                .first();
+        });
 
-    if (query.project_completed === 0) {
-        return {
-            ...query,
-            project_completed: false
-        }
-    } else if (query.project_completed === 1) {
-        return {
-            ...query,
-            project_completed: true
-        }
-    }
+    !newProject.project_completed ? newProject.project_completed = false : newProject.project_completed = true;
+    return newProject;
 }
 
 module.exports = {
     getAll,
     add
-}
+} 
