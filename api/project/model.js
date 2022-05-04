@@ -1,11 +1,10 @@
 // build your `Project` model here
 const db = require('../../data/dbConfig');
 
-const getAll = () => {
+async function getAll() {
     const query = db('projects');
     const projectMap = query.map(project => {
         if (project.project_completed === 0) {
-
             return {
                 ...project,
                 project_completed: false
@@ -18,6 +17,7 @@ const getAll = () => {
         }
     })
     return projectMap;
+    // return db('projects');
 }
 
 function add(project) {
@@ -28,9 +28,7 @@ function add(project) {
                 .where('project_id', project_id)
                 .first()
         })
-    console.log(query);
     if (query.project_completed === 0) {
-
         return {
             ...query,
             project_completed: false
